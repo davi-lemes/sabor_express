@@ -1,11 +1,12 @@
 from modelos.avaliacao import Avaliacao
+from modelos.cardapio.item_cardapio import ItemCardapio
 
 class Restaurante:
     """Representa um restaurante e suas características"""
 
     restaurantes = []
 
-    def __init__(self, nome, categoria):  # uma funcão definida para ser o método construtor da classe, utilizando o __init__. O self como parametro serve para dizer que os atributos irão para a instância que estamos na tratando no momento.
+    def __init__(self, nome, categoria):  # uma funcão definida para ser o método construtor da classe, utilizando o __init__. O self como parametro serve para dizer que os atributos irão para a instância que estamos tratando no momento.
         """Inicializa uma instância de Restaurante
         
         Parâmetros:
@@ -17,6 +18,7 @@ class Restaurante:
         self._categoria = categoria.upper()
         self._ativo = False  # o _ mantém o atributo "ativo" privado, para sinalizar que é um atributo que não deve ser alterado
         self._avaliacao = []
+        self._cardapio = []
         Restaurante.restaurantes.append(self)
 
     def __str__(self):  # método que nos retorna o valor dos atributos em string para facilitar a visão do que foi atribuído no terminal.
@@ -61,6 +63,22 @@ class Restaurante:
         quantidade_de_notas = len(self._avaliacao)
         media = round(soma_das_notas / quantidade_de_notas, 1)
         return media
+
+    def adicionar_no_cardapio(self, item):
+        if isinstance(item, ItemCardapio): # o método isistance verifica se o item é uma istancia ou classe derivada da classe ItemCardapio
+            self._cardapio.append(item)
+
+    @property
+    def exbir_cardapio(self):
+        print(f'Cardápio do Restaurante {self._nome}\n')
+        for i, item in enumerate(self._cardapio, start=1): # o método enumerate() tem a capacidade de enumerar itens que temos em uma lista e podemos definir a partir de qual numero iremos começar a enumerar.
+            if hasattr(item, 'descricao'): # hasattr() verifica se o valor dentro das aspas, é um atributo de item
+                mensagem_prato = f'{i}. Nome: {item._nome} | Preço: R${item._preco} | Descrição: {item.descricao}'
+                print(mensagem_prato)
+            else:
+                mensagem_bebida = f'{i}. Nome: {item._nome} | Preço: R${item._preco} | Tamanho: {item.tamanho}'
+                print(mensagem_bebida)
+
 
 
 # print(dir(restaurante_praca)) o dir mostra todos atributos e métodos de uma determinada instância
